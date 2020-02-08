@@ -1,28 +1,28 @@
 from flask import Flask, jsonify
 
-from controllers.auth import Auth as auth
-from controllers.profile import Profile as profile
-from controllers.report import Report as report
-from controllers.schedule import Schedule as schedule
+from controllers.auth import Auth
+from controllers.profile import Profile
+from controllers.report import Report
+from controllers.schedule import Schedule
 
 import os
 
 app = Flask(__name__)
 
-auth.blueprint.add_url_rule('', 'auth.user', auth.autenticacao(), methods=['POST'])
-app.register_blueprint(auth.blueprint, url_prefix='/autenticacao')
+Auth.blueprint.add_url_rule('', 'auth.user', Auth.autenticacao, methods=['POST'])
+app.register_blueprint(Auth.blueprint, url_prefix='/autenticacao')
 
-profile.blueprint.add_url_rule('', 'user.user', profile.perfilDados())
-profile.blueprint.add_url_rule('/geral', 'user.geral', profile.perfilDadosGerais())
-profile.blueprint.add_url_rule('/foto', 'user.photo', profile.perfilFoto())
-app.register_blueprint(profile.blueprint, url_prefix='/perfil')
+Profile.blueprint.add_url_rule('', 'user.user', Profile.perfilDados)
+Profile.blueprint.add_url_rule('/geral', 'user.geral', Profile.perfilDadosGerais)
+Profile.blueprint.add_url_rule('/foto', 'user.photo', Profile.perfilFoto)
+app.register_blueprint(Profile.blueprint, url_prefix='/perfil')
 
-report.blueprint.add_url_rule('', 'report.list', report.lista_relatorios())
-report.blueprint.add_url_rule('/pdf', 'report.generate', report.geraRelatorio())
-app.register_blueprint(report.blueprint, url_prefix='/relatorios')
+Report.blueprint.add_url_rule('', 'report.list', Report.lista_relatorios)
+Report.blueprint.add_url_rule('/pdf', 'report.generate', Report.geraRelatorio)
+app.register_blueprint(Report.blueprint, url_prefix='/relatorios')
 
-schedule.blueprint.add_url_rule('', 'schedule.time', schedule.horarios())
-app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
+Schedule.blueprint.add_url_rule('', 'schedule.time', Schedule.horarios)
+app.register_blueprint(Schedule.blueprint, url_prefix='/horarios')
 
 
 @app.errorhandler(404)
