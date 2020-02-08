@@ -1,11 +1,13 @@
-from flask import jsonify, request, send_file
+from flask import jsonify, request, send_file, Blueprint
 from bs4 import BeautifulSoup as bs
 from requests import Session
 import modules.helpers as helpers
 import io
 
+bp_report = Blueprint('report', __name__)
 
-@app.route('/relatorios', methods=['GET'])
+
+@bp_report.route('/', methods=['GET'])
 def lista_relatorios():
     sessao = Session()
 
@@ -38,7 +40,7 @@ def lista_relatorios():
         })
 
 
-@app.route('/relatorios/pdf', methods=['GET'])
+@bp_report.route('/pdf', methods=['GET'])
 def geraRelatorio():
     sessao = Session()
 
