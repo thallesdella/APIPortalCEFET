@@ -12,7 +12,7 @@ class Profile(Controller):
 
     def perfilDados(self):  # @TODO: finalizar coleta de dados
         if not self.Autenticado():
-            return self.error_response(403, 'Não Autorizado')
+            self.error(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + self.matricula)
@@ -27,7 +27,7 @@ class Profile(Controller):
 
     def perfilDadosGerais(self):  # TODO: finalizar coleta de dados
         if not self.Autenticado():
-            return self.error_response(403, 'Não Autorizado')
+            return self.error(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + self.matricula)
@@ -81,7 +81,7 @@ class Profile(Controller):
 
     def perfilFoto(self):
         if not self.Autenticado():
-            return self.error_response(403, 'Não Autorizado')
+            return self.error(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", self.cookie)
         img_data = self.sessao.get(Controller.URLS['foto_action']).content

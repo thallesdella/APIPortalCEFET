@@ -65,5 +65,5 @@ class Schedule(Controller):
             for itemCelula in TdCelula:
                 celula = itemCelula.find('a')
                 print(celula.text)
-    '''
-        return self.error_response(501, 'Não Implementado')
+        '''
+        self.error(501, 'Não Implementado')

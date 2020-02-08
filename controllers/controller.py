@@ -1,4 +1,4 @@
-from flask import Blueprint, make_response, jsonify, request
+from flask import Blueprint, make_response, jsonify, request, abort
 from requests import Session
 import unicodedata
 
@@ -48,8 +48,9 @@ class Controller:
             return True
 
     @staticmethod
-    def error_response(code, message):
-        return make_response(jsonify({"code": code, "error": message}), code)
+    def error(code, message):
+        abort(code, description=message)
+        # return make_response(jsonify({"code": code, "error": message}), code)
 
     @staticmethod
     def success_response(code, data):

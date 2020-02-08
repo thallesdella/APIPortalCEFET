@@ -11,7 +11,7 @@ class Report(Controller):
 
     def lista_relatorios(self):
         if not self.Autenticado():
-            return self.error_response(403, 'Não Autorizado')
+            self.error(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteRelatorios = self.sessao.get(self.URLS['relatorio_action_matricula'] + self.matricula)
@@ -31,7 +31,7 @@ class Report(Controller):
 
     def geraRelatorio(self, url):
         if not self.Autenticado():
-            return self.error_response(403, 'Não Autorizado')
+            self.error(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", self.cookie)
 
