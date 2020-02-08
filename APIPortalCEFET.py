@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, json
+from werkzeug.exceptions import HTTPException
 
 from controllers.auth import Auth
 from controllers.profile import Profile
@@ -25,12 +26,15 @@ Schedule.blueprint.add_url_rule('', 'schedule.time', Schedule.horarios)
 app.register_blueprint(Schedule.blueprint, url_prefix='/horarios')
 
 
-@app.errorhandler(404)
-def respond404(error):
-    return jsonify({
-        "code": 404,
-        "error": "Nao encontrado"
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    response = e.get_response()
+    response.data = json.dumps({
+        "code": e.code,
+        "error": e.description,
     })
+    response.content_type = "application/json"
+    return response
 
 
 if __name__ == "__main__":
