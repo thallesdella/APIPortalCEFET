@@ -12,8 +12,6 @@ class Report(Controller):
 
     # @bp_report.route('/', methods=['GET'])
     def lista_relatorios(self):
-        sessao = Session()
-
         cookie = request.args.get('cookie')
         matricula = request.args.get('matricula')
 
@@ -23,8 +21,8 @@ class Report(Controller):
                 "error": "Nao autorizado"
             })
 
-        sessao.cookies.set("JSESSIONID", cookie)
-        siteRelatorios = sessao.get(self.URLS['relatorio_action_matricula'] + matricula)
+        self.sessao.cookies.set("JSESSIONID", cookie)
+        siteRelatorios = self.sessao.get(self.URLS['relatorio_action_matricula'] + matricula)
         siteRelatoriosBS = bs(siteRelatorios.content, "html.parser")
 
         RelatoriosBrutos = siteRelatoriosBS.find_all('a', {'title': 'Relatório em formato PDF'})
@@ -44,8 +42,6 @@ class Report(Controller):
 
     # @bp_report.route('/pdf', methods=['GET'])
     def geraRelatorio(self):
-        sessao = Session()
-
         cookie = request.args.get('cookie')
         link = request.args.get('link')
 
@@ -55,9 +51,9 @@ class Report(Controller):
                 "error": "Nao autorizado"
             })
 
-        sessao.cookies.set("JSESSIONID", cookie)
+        self.sessao.cookies.set("JSESSIONID", cookie)
 
-        pdf_data = sessao.get(self.URLS['aluno_relatorio'] + link).content
+        pdf_data = self.sessao.get(self.URLS['aluno_relatorio'] + link).content
         pdf = io.BytesIO()
         pdf.write(pdf_data)
         pdf.seek(0)

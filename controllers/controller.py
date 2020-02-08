@@ -17,7 +17,8 @@ class Controller:
     }
 
     def __init__(self, name, import_name):
-        bp = Blueprint(name, import_name)
+        self.bp = Blueprint(name, import_name)
+        self.sessao = Session()
 
     def normalizacao(self, texto):
         return unicodedata.normalize('NFKD', texto) \

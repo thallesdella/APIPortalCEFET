@@ -1,6 +1,5 @@
 from flask import jsonify, request, send_file
 from controllers.controller import Controller
-from requests import Session
 from bs4 import BeautifulSoup as bs
 import io
 import re
@@ -28,8 +27,6 @@ class Profile(Controller):
     # @bp_profile.route('/', methods=['GET'])
     def perfilDados(self):  # @TODO: finalizar coleta de dados
 
-        sessao = Session()
-
         cookie = request.args.get('cookie')
         matricula = request.args.get('matricula')
 
@@ -39,9 +36,9 @@ class Profile(Controller):
                 "error": "Nao autorizado"
             })
 
-        sessao.cookies.set("JSESSIONID", cookie)
-        siteHorarios = sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
-        sitePerfil = sessao.get(Controller.URLS['perfil_perfil_action'])
+        self.sessao.cookies.set("JSESSIONID", cookie)
+        siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
+        sitePerfil = self.sessao.get(Controller.URLS['perfil_perfil_action'])
 
         return jsonify(
             {
@@ -58,11 +55,9 @@ class Profile(Controller):
     # @bp_profile.route('/geral', methods=['GET'])
     def perfilDadosGerais(self):  # TODO: finalizar coleta de dados
 
-        sessao = Session()
-
         cookie = request.args.get('cookie')
         matricula = request.args.get('matricula')
-        sessao.cookies.set("JSESSIONID", cookie)
+        self.sessao.cookies.set("JSESSIONID", cookie)
 
         if not self.Autenticado(cookie):
             return jsonify({
@@ -70,8 +65,8 @@ class Profile(Controller):
                 "error": "Nao autorizado"
             })
 
-        siteHorarios = sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
-        sitePerfil = sessao.get(Controller.URLS['perfil_perfil_action'])
+        siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
+        sitePerfil = self.sessao.get(Controller.URLS['perfil_perfil_action'])
 
         return jsonify({
             "codigo": 200,
@@ -124,10 +119,9 @@ class Profile(Controller):
 
     # @bp_profile.route('/foto', methods=['GET'])
     def perfilFoto(self):
-        sessao = Session()
 
         cookie = request.args.get('cookie')
-        sessao.cookies.set("JSESSIONID", cookie)
+        self.sessao.cookies.set("JSESSIONID", cookie)
 
         if not self.Autenticado(cookie):
             return jsonify({
@@ -135,7 +129,7 @@ class Profile(Controller):
                 "error": "Nao autorizado"
             })
 
-        img_data = sessao.get(Controller.URLS['foto_action']).content
+        img_data = self.sessao.get(Controller.URLS['foto_action']).content
         img = io.BytesIO()
         img.write(img_data)
         img.seek(0)
