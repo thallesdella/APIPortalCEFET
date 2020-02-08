@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import request
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 
@@ -67,7 +67,4 @@ class Schedule(Controller):
                 celula = itemCelula.find('a')
                 print(celula.text)
     '''
-        return jsonify({
-            "code": 501,
-            "error": "Nao Implementado"
-        })
+        return self.error_response(501, 'Não Implementado')

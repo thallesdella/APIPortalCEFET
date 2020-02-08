@@ -1,4 +1,4 @@
-from flask import jsonify, request, send_file
+from flask import request, send_file
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 import io
@@ -14,10 +14,7 @@ class Report(Controller):
         matricula = request.args.get('matricula')
 
         if not self.Autenticado(cookie):
-            return jsonify({
-                "code": 401,
-                "error": "Nao autorizado"
-            })
+            return self.error_response(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", cookie)
         siteRelatorios = self.sessao.get(self.URLS['relatorio_action_matricula'] + matricula)
@@ -33,20 +30,14 @@ class Report(Controller):
             relatorio['link'] = item['href'].replace("/aluno/aluno/relatorio/", '')
             Relatorios.append(relatorio)
 
-            return jsonify({
-                "codigo": 200,
-                "data": Relatorios
-            })
+            return self.success_response(200, Relatorios)
 
     def geraRelatorio(self):
         cookie = request.args.get('cookie')
         link = request.args.get('link')
 
         if not self.Autenticado(cookie):
-            return jsonify({
-                "code": 401,
-                "error": "Nao autorizado"
-            })
+            return self.error_response(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", cookie)
 

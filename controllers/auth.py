@@ -1,6 +1,6 @@
-from flask import jsonify, request
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
+from flask import request
 
 
 class Auth(Controller):
@@ -24,15 +24,6 @@ class Auth(Controller):
         Cookie = self.sessao.cookies.get_dict()
 
         if Cookie == '':
-            return jsonify({
-                "code": 401,
-                "error": "Nao autorizado"
-            })
+            return self.error_response(403, 'Não Autorizado')
 
-        return jsonify({
-            "code": 200,
-            "data": {
-                "matricula": Matricula,
-                "cookie": Cookie['JSESSIONID']
-            }
-        })
+        return self.success_response(200, {"matricula": Matricula, "cookie": Cookie['JSESSIONID']})
