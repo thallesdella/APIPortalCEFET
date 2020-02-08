@@ -1,7 +1,6 @@
 from flask import jsonify, request, send_file
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
-from requests import Session
 import io
 
 
@@ -10,7 +9,6 @@ class Report(Controller):
     def __init__(self):
         Controller.__init__(self, 'report', __name__)
 
-    # @bp_report.route('/', methods=['GET'])
     def lista_relatorios(self):
         cookie = request.args.get('cookie')
         matricula = request.args.get('matricula')
@@ -40,7 +38,6 @@ class Report(Controller):
                 "data": Relatorios
             })
 
-    # @bp_report.route('/pdf', methods=['GET'])
     def geraRelatorio(self):
         cookie = request.args.get('cookie')
         link = request.args.get('link')

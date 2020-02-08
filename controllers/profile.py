@@ -24,7 +24,6 @@ class Profile(Controller):
             print('Exception:' + e)
             return None
 
-    # @bp_profile.route('/', methods=['GET'])
     def perfilDados(self):  # @TODO: finalizar coleta de dados
 
         cookie = request.args.get('cookie')
@@ -52,7 +51,6 @@ class Profile(Controller):
             }
         )
 
-    # @bp_profile.route('/geral', methods=['GET'])
     def perfilDadosGerais(self):  # TODO: finalizar coleta de dados
 
         cookie = request.args.get('cookie')
@@ -117,7 +115,6 @@ class Profile(Controller):
             }
         })
 
-    # @bp_profile.route('/foto', methods=['GET'])
     def perfilFoto(self):
 
         cookie = request.args.get('cookie')

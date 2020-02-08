@@ -8,7 +8,6 @@ class Auth(Controller):
     def __init__(self):
         Controller.__init__(self, 'auth', __name__)
 
-    # @app.route('/autenticacao', methods=['POST'])
     def autenticacao(self):
         usuario = request.get_json().get('usuario')
         senha = request.get_json().get('senha')
