@@ -1,10 +1,18 @@
 from flask import Flask, jsonify, request
 from bs4 import BeautifulSoup as bs
 from requests import Session
+
+from modules.profile import bp_profile
+from modules.report import bp_report
+from modules.schedule import bp_schedule
 import modules.helpers as helpers
+
 import os
 
 app = Flask(__name__)
+app.register_blueprint(bp_profile, url_prefix='perfil')
+app.register_blueprint(bp_report, url_prefix='relatorios')
+app.register_blueprint(bp_schedule, url_prefix='horarios')
 
 
 @app.route('/autenticacao', methods=['POST'])
