@@ -1,10 +1,11 @@
-from flask import jsonify, request, send_file
+from flask import jsonify, request, send_file, Blueprint
 from requests import Session
 from bs4 import BeautifulSoup as bs
 import modules.helpers as helpers
 import io
 import re
 
+bp_profile = Blueprint('profile', __name__)
 
 def pegaPropriedadePerfil(conteudoHTML, propriedade):
     try:
@@ -21,7 +22,7 @@ def pegaPropriedadePerfil(conteudoHTML, propriedade):
         return None
 
 
-@app.route('/perfil', methods=['GET'])
+@bp_profile.route('/', methods=['GET'])
 def perfilDados():  # @TODO: finalizar coleta de dados
 
     sessao = Session()
@@ -52,7 +53,7 @@ def perfilDados():  # @TODO: finalizar coleta de dados
     )
 
 
-@app.route('/perfil/geral', methods=['GET'])
+@bp_profile.route('/geral', methods=['GET'])
 def perfilDadosGerais():  # TODO: finalizar coleta de dados
 
     sessao = Session()
@@ -120,7 +121,7 @@ def perfilDadosGerais():  # TODO: finalizar coleta de dados
     })
 
 
-@app.route('/perfil/foto', methods=['GET'])
+@bp_profile.route('/foto', methods=['GET'])
 def perfilFoto():
     sessao = Session()
 
