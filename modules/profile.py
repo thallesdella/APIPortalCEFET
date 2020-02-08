@@ -14,7 +14,7 @@ def pegaPropriedadePerfil(conteudoHTML, propriedade):
         objetoIgnorado = bloco.find('span')
         objetoIgnorado.extract()
 
-        return normalizacao(bloco.get_text())
+        return helpers.normalizacao(bloco.get_text())
 
     except Exception as e:
         print('Exception:' + e)
@@ -29,15 +29,15 @@ def perfilDados():  # @TODO: finalizar coleta de dados
     cookie = request.args.get('cookie')
     matricula = request.args.get('matricula')
 
-    if not Autenticado(cookie):
+    if not helpers.Autenticado(cookie):
         return jsonify({
             "code": 401,
             "error": "Nao autorizado"
         })
 
     sessao.cookies.set("JSESSIONID", cookie)
-    siteHorarios = sessao.get(URLS['menu_action_matricula'] + matricula)
-    sitePerfil = sessao.get(URLS['perfil_perfil_action'])
+    siteHorarios = sessao.get(helpers.URLS['menu_action_matricula'] + matricula)
+    sitePerfil = sessao.get(helpers.URLS['perfil_perfil_action'])
 
     return jsonify(
         {
@@ -61,14 +61,14 @@ def perfilDadosGerais():  # TODO: finalizar coleta de dados
     matricula = request.args.get('matricula')
     sessao.cookies.set("JSESSIONID", cookie)
 
-    if not Autenticado(cookie):
+    if not helpers.Autenticado(cookie):
         return jsonify({
             "code": 401,
             "error": "Nao autorizado"
         })
 
-    siteHorarios = sessao.get(URLS['menu_action_matricula'] + matricula)
-    sitePerfil = sessao.get(URLS['perfil_perfil_action'])
+    siteHorarios = sessao.get(helpers.URLS['menu_action_matricula'] + matricula)
+    sitePerfil = sessao.get(helpers.URLS['perfil_perfil_action'])
 
     return jsonify({
         "codigo": 200,
@@ -127,13 +127,13 @@ def perfilFoto():
     cookie = request.args.get('cookie')
     sessao.cookies.set("JSESSIONID", cookie)
 
-    if not Autenticado(cookie):
+    if not helpers.Autenticado(cookie):
         return jsonify({
             "code": 401,
             "error": "Nao autorizado"
         })
 
-    img_data = sessao.get(URLS['foto_action']).content
+    img_data = sessao.get(helpers.URLS['foto_action']).content
     img = io.BytesIO()
     img.write(img_data)
     img.seek(0)
