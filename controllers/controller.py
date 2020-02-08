@@ -45,5 +45,5 @@ class Controller:
         return make_response(jsonify({"code": code, "error": message}), code)
 
     @staticmethod
-    def success_response(code, message):
-        return make_response(jsonify({"code": code, "data": message}), code)
+    def success_response(code, data):
+        return make_response(jsonify({"code": code, "data": data}), code)
