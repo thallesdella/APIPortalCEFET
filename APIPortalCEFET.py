@@ -2,11 +2,11 @@ from flask import Flask, jsonify, request
 from bs4 import BeautifulSoup as bs
 from requests import Session
 
-from modules.profile import bp_profile
-from modules.report import bp_report
-from modules.schedule import bp_schedule
+from controllers.profile import bp_profile
+from controllers.report import bp_report
+from controllers.schedule import bp_schedule
 
-import modules.helpers as helpers
+import controllers.helpers as helpers
 import os
 
 app = Flask(__name__)

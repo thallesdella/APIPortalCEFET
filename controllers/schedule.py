@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint
 from bs4 import BeautifulSoup as bs
 from requests import Session
-import modules.helpers as helpers
+import controllers.helpers as helpers
 
 bp_schedule = Blueprint('schedule', __name__)
 

@@ -1,7 +1,7 @@
 from flask import jsonify, request, send_file, Blueprint
 from requests import Session
 from bs4 import BeautifulSoup as bs
-import modules.helpers as helpers
+import controllers.helpers as helpers
 import io
 import re
 

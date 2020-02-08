@@ -1,7 +1,7 @@
 from flask import jsonify, request, send_file, Blueprint
 from bs4 import BeautifulSoup as bs
 from requests import Session
-import modules.helpers as helpers
+import controllers.helpers as helpers
 import io
 
 bp_report = Blueprint('report', __name__)
