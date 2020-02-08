@@ -11,10 +11,6 @@ class Profile(Controller):
         Controller.__init__(self, 'profile', __name__)
 
     def perfilDados(self):  # @TODO: finalizar coleta de dados
-        if not self.Autenticado():
-            self.error(403, 'Não Autorizado')
-
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + self.matricula)
         sitePerfil = self.sessao.get(Controller.URLS['perfil_perfil_action'])
 
@@ -26,10 +22,6 @@ class Profile(Controller):
         })
 
     def perfilDadosGerais(self):  # TODO: finalizar coleta de dados
-        if not self.Autenticado():
-            return self.error(403, 'Não Autorizado')
-
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteHorarios = self.sessao.get(Controller.URLS['menu_action_matricula'] + self.matricula)
         sitePerfil = self.sessao.get(Controller.URLS['perfil_perfil_action'])
 
@@ -80,10 +72,6 @@ class Profile(Controller):
         })
 
     def perfilFoto(self):
-        if not self.Autenticado():
-            return self.error(403, 'Não Autorizado')
-
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
         img_data = self.sessao.get(Controller.URLS['foto_action']).content
         img = io.BytesIO()
         img.write(img_data)

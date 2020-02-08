@@ -22,9 +22,15 @@ class Controller:
 
     matricula = None
 
-    def __init__(self, name, import_name):
+    def __init__(self, name, import_name, validate_token=True):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
+
+        if validate_token:
+            if not self.Autenticado():
+                self.error(403, 'Não Autorizado')
+            else:
+                self.sessao.cookies.set("JSESSIONID", self.cookie)
 
     def normalizacao(self, texto):
         return unicodedata.normalize('NFKD', texto) \
@@ -50,7 +56,6 @@ class Controller:
     @staticmethod
     def error(code, message):
         abort(code, description=message)
-        # return make_response(jsonify({"code": code, "error": message}), code)
 
     @staticmethod
     def success_response(code, data):

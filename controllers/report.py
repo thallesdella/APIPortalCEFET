@@ -10,10 +10,6 @@ class Report(Controller):
         Controller.__init__(self, 'report', __name__)
 
     def lista_relatorios(self):
-        if not self.Autenticado():
-            self.error(403, 'Não Autorizado')
-
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
         siteRelatorios = self.sessao.get(self.URLS['relatorio_action_matricula'] + self.matricula)
         siteRelatoriosBS = bs(siteRelatorios.content, "html.parser")
 
@@ -30,11 +26,6 @@ class Report(Controller):
             return self.success_response(200, Relatorios)
 
     def geraRelatorio(self, url):
-        if not self.Autenticado():
-            self.error(403, 'Não Autorizado')
-
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
-
         pdf_data = self.sessao.get(self.URLS['aluno_relatorio'] + url).content
         pdf = io.BytesIO()
         pdf.write(pdf_data)
