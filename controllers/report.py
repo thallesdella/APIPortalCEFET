@@ -32,16 +32,15 @@ class Report(Controller):
 
             return self.success_response(200, Relatorios)
 
-    def geraRelatorio(self):
+    def geraRelatorio(self, url):
         cookie = request.args.get('cookie')
-        link = request.args.get('link')
 
         if not self.Autenticado(cookie):
             return self.error_response(403, 'Não Autorizado')
 
         self.sessao.cookies.set("JSESSIONID", cookie)
 
-        pdf_data = self.sessao.get(self.URLS['aluno_relatorio'] + link).content
+        pdf_data = self.sessao.get(self.URLS['aluno_relatorio'] + url).content
         pdf = io.BytesIO()
         pdf.write(pdf_data)
         pdf.seek(0)

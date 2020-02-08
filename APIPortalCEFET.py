@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__)
 
-Auth.blueprint.add_url_rule('', 'auth.user', Auth.autenticacao, methods=['POST'])
+Auth.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Auth.autenticacao, methods=['POST'])
 app.register_blueprint(Auth.blueprint, url_prefix='/autenticacao')
 
 Profile.blueprint.add_url_rule('', 'user.user', Profile.perfilDados)
@@ -18,7 +18,7 @@ Profile.blueprint.add_url_rule('/foto', 'user.photo', Profile.perfilFoto)
 app.register_blueprint(Profile.blueprint, url_prefix='/perfil')
 
 Report.blueprint.add_url_rule('', 'report.list', Report.lista_relatorios)
-Report.blueprint.add_url_rule('/pdf', 'report.generate', Report.geraRelatorio)
+Report.blueprint.add_url_rule('/<path:url>', 'report.generate', Report.geraRelatorio)
 app.register_blueprint(Report.blueprint, url_prefix='/relatorios')
 
 Schedule.blueprint.add_url_rule('', 'schedule.time', Schedule.horarios)
