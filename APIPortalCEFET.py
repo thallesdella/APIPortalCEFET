@@ -5,8 +5,8 @@ from requests import Session
 from modules.profile import bp_profile
 from modules.report import bp_report
 from modules.schedule import bp_schedule
-import modules.helpers as helpers
 
+import modules.helpers as helpers
 import os
 
 app = Flask(__name__)
