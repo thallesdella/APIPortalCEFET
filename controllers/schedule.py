@@ -1,4 +1,3 @@
-from flask import request
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 

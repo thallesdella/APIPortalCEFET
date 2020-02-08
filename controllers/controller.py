@@ -1,4 +1,4 @@
-from flask import Blueprint, make_response, jsonify
+from flask import Blueprint, make_response, jsonify, request
 from requests import Session
 import unicodedata
 
@@ -18,6 +18,10 @@ class Controller:
 
     blueprint = None
 
+    cookie = None
+
+    matricula = None
+
     def __init__(self, name, import_name):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
@@ -28,12 +32,15 @@ class Controller:
             .replace('  ', '').replace('\n', '') \
             .replace('\r', '')
 
-    def Autenticado(self, cookie):
-        sessao = Session()
-        sessao.cookies.set("JSESSIONID", cookie)
-        sessao.headers.update({'referer': self.URLS['matricula']})
+    def Autenticado(self):
+        if not request.headers['X-Token']:
+            return False
 
-        acesso = sessao.get(self.URLS['index_action'], allow_redirects=False)
+        self.cookie = request.headers['X-Token']
+        self.sessao.cookies.set("JSESSIONID", self.cookie)
+        self.sessao.headers.update({'referer': self.URLS['matricula']})
+
+        acesso = self.sessao.get(self.URLS['index_action'], allow_redirects=False)
 
         if acesso.status_code == 302:
             return False
