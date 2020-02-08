@@ -1,10 +1,12 @@
-from flask import jsonify, request, send_file
+from flask import jsonify, request, Blueprint
 from bs4 import BeautifulSoup as bs
 from requests import Session
 import modules.helpers as helpers
 
+bp_schedule = Blueprint('schedule', __name__)
 
-@app.route('/horarios', methods=['GET'])
+
+@bp_schedule.route('/horarios', methods=['GET'])
 def horarios():
     '''
     sessao = Session()
