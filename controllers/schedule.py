@@ -2,7 +2,6 @@ from flask import jsonify, request, Blueprint
 from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 from requests import Session
-import controllers.helpers as helpers
 
 
 class Schedule(Controller):

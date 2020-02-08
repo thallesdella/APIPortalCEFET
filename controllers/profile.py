@@ -2,7 +2,6 @@ from flask import jsonify, request, send_file
 from controllers.controller import Controller
 from requests import Session
 from bs4 import BeautifulSoup as bs
-import controllers.helpers as helpers
 import io
 import re
 
@@ -20,7 +19,7 @@ class Profile(Controller):
             objetoIgnorado = bloco.find('span')
             objetoIgnorado.extract()
 
-            return helpers.normalizacao(bloco.get_text())
+            return self.normalizacao(bloco.get_text())
 
         except Exception as e:
             print('Exception:' + e)
@@ -34,15 +33,15 @@ class Profile(Controller):
         cookie = request.args.get('cookie')
         matricula = request.args.get('matricula')
 
-        if not helpers.Autenticado(cookie):
+        if not self.Autenticado(cookie):
             return jsonify({
                 "code": 401,
                 "error": "Nao autorizado"
             })
 
         sessao.cookies.set("JSESSIONID", cookie)
-        siteHorarios = sessao.get(helpers.URLS['menu_action_matricula'] + matricula)
-        sitePerfil = sessao.get(helpers.URLS['perfil_perfil_action'])
+        siteHorarios = sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
+        sitePerfil = sessao.get(Controller.URLS['perfil_perfil_action'])
 
         return jsonify(
             {
@@ -65,14 +64,14 @@ class Profile(Controller):
         matricula = request.args.get('matricula')
         sessao.cookies.set("JSESSIONID", cookie)
 
-        if not helpers.Autenticado(cookie):
+        if not self.Autenticado(cookie):
             return jsonify({
                 "code": 401,
                 "error": "Nao autorizado"
             })
 
-        siteHorarios = sessao.get(helpers.URLS['menu_action_matricula'] + matricula)
-        sitePerfil = sessao.get(helpers.URLS['perfil_perfil_action'])
+        siteHorarios = sessao.get(Controller.URLS['menu_action_matricula'] + matricula)
+        sitePerfil = sessao.get(Controller.URLS['perfil_perfil_action'])
 
         return jsonify({
             "codigo": 200,
@@ -130,13 +129,13 @@ class Profile(Controller):
         cookie = request.args.get('cookie')
         sessao.cookies.set("JSESSIONID", cookie)
 
-        if not helpers.Autenticado(cookie):
+        if not self.Autenticado(cookie):
             return jsonify({
                 "code": 401,
                 "error": "Nao autorizado"
             })
 
-        img_data = sessao.get(helpers.URLS['foto_action']).content
+        img_data = sessao.get(Controller.URLS['foto_action']).content
         img = io.BytesIO()
         img.write(img_data)
         img.seek(0)
