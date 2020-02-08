@@ -10,9 +10,9 @@ import modules.helpers as helpers
 import os
 
 app = Flask(__name__)
-app.register_blueprint(bp_profile, url_prefix='perfil')
-app.register_blueprint(bp_report, url_prefix='relatorios')
-app.register_blueprint(bp_schedule, url_prefix='horarios')
+app.register_blueprint(bp_profile, url_prefix='/perfil')
+app.register_blueprint(bp_report, url_prefix='/relatorios')
+app.register_blueprint(bp_schedule, url_prefix='/horarios')
 
 
 @app.route('/autenticacao', methods=['POST'])
