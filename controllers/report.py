@@ -1,68 +1,71 @@
-from flask import jsonify, request, send_file, Blueprint
+from flask import jsonify, request, send_file
+from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 from requests import Session
 import controllers.helpers as helpers
 import io
 
-bp_report = Blueprint('report', __name__)
 
+class Report(Controller):
 
-@bp_report.route('/', methods=['GET'])
-def lista_relatorios():
-    sessao = Session()
+    def __init__(self):
+        Controller.__init__(self, 'report', __name__)
 
-    cookie = request.args.get('cookie')
-    matricula = request.args.get('matricula')
+    # @bp_report.route('/', methods=['GET'])
+    def lista_relatorios(self):
+        sessao = Session()
 
-    if not helpers.Autenticado(cookie):
-        return jsonify({
-            "code": 401,
-            "error": "Nao autorizado"
-        })
+        cookie = request.args.get('cookie')
+        matricula = request.args.get('matricula')
 
-    sessao.cookies.set("JSESSIONID", cookie)
-    siteRelatorios = sessao.get(helpers.URLS['relatorio_action_matricula'] + matricula)
-    siteRelatoriosBS = bs(siteRelatorios.content, "html.parser")
+        if not helpers.Autenticado(cookie):
+            return jsonify({
+                "code": 401,
+                "error": "Nao autorizado"
+            })
 
-    RelatoriosBrutos = siteRelatoriosBS.find_all('a', {'title': 'Relatório em formato PDF'})
+        sessao.cookies.set("JSESSIONID", cookie)
+        siteRelatorios = sessao.get(helpers.URLS['relatorio_action_matricula'] + matricula)
+        siteRelatoriosBS = bs(siteRelatorios.content, "html.parser")
 
-    Relatorios = []
-    for item in RelatoriosBrutos:
-        relatorio = {}
-        relatorio['id'] = RelatoriosBrutos.index(item)
-        relatorio['nome'] = helpers.normalizacao(item.previousSibling)
-        relatorio['link'] = item['href'].replace("/aluno/aluno/relatorio/", '')
-        Relatorios.append(relatorio)
+        RelatoriosBrutos = siteRelatoriosBS.find_all('a', {'title': 'Relatório em formato PDF'})
 
-        return jsonify({
-            "codigo": 200,
-            "data": Relatorios
-        })
+        Relatorios = []
+        for item in RelatoriosBrutos:
+            relatorio = {}
+            relatorio['id'] = RelatoriosBrutos.index(item)
+            relatorio['nome'] = helpers.normalizacao(item.previousSibling)
+            relatorio['link'] = item['href'].replace("/aluno/aluno/relatorio/", '')
+            Relatorios.append(relatorio)
 
+            return jsonify({
+                "codigo": 200,
+                "data": Relatorios
+            })
 
-@bp_report.route('/pdf', methods=['GET'])
-def geraRelatorio():
-    sessao = Session()
+    # @bp_report.route('/pdf', methods=['GET'])
+    def geraRelatorio(self):
+        sessao = Session()
 
-    cookie = request.args.get('cookie')
-    link = request.args.get('link')
+        cookie = request.args.get('cookie')
+        link = request.args.get('link')
 
-    if not helpers.Autenticado(cookie):
-        return jsonify({
-            "code": 401,
-            "error": "Nao autorizado"
-        })
+        if not helpers.Autenticado(cookie):
+            return jsonify({
+                "code": 401,
+                "error": "Nao autorizado"
+            })
 
-    sessao.cookies.set("JSESSIONID", cookie)
+        sessao.cookies.set("JSESSIONID", cookie)
 
-    pdf_data = sessao.get(helpers.URLS['aluno_relatorio'] + link).content
-    pdf = io.BytesIO()
-    pdf.write(pdf_data)
-    pdf.seek(0)
+        pdf_data = sessao.get(helpers.URLS['aluno_relatorio'] + link).content
+        pdf = io.BytesIO()
+        pdf.write(pdf_data)
+        pdf.seek(0)
 
-    return send_file(
-        pdf,
-        as_attachment=True,
-        attachment_filename='relatorio.pdf',
-        mimetype='application/pdf'
-    )
+        return send_file(
+            pdf,
+            as_attachment=True,
+            attachment_filename='relatorio.pdf',
+            mimetype='application/pdf'
+        )
