@@ -16,8 +16,10 @@ class Controller:
         'security_check': 'https://alunos.cefet-rj.br/aluno/j_security_check'
     }
 
+    blueprint = None
+
     def __init__(self, name, import_name):
-        self.bp = Blueprint(name, import_name)
+        self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
 
     def normalizacao(self, texto):
@@ -37,3 +39,4 @@ class Controller:
             return False
         else:
             return True
+
