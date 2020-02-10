@@ -1,23 +1,29 @@
-from flask import current_app, g
-import sqlite3
+from flask import current_app
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 
 class Db:
-    def __init__(self):
-        if 'db' not in g:
-            g.db = sqlite3.connect(
-                current_app.config['DATABASE'],
-                detect_types=sqlite3.PARSE_DECLTYPES
-            )
-            g.db.row_factory = sqlite3.Row
-        self.db = g.db
-
-    def get_db(self):
-        return self.db
+    @staticmethod
+    def base():
+        base = declarative_base()
+        base.query = Db.__db_session().query_property()
+        return base
 
     @staticmethod
-    def close_db(e=None):
-        db_handle = g.pop('db', None)
+    def create_db():
+        Db.base().metadata.create_all(bind=Db.__engine())
 
-        if db_handle is not None:
-            db_handle.close()
+    @staticmethod
+    def close_db():
+        Db.__db_session().remove()
+        return
+
+    @staticmethod
+    def __engine():
+        return create_engine(current_app, convert_unicode=True)
+
+    @staticmethod
+    def __db_session():
+        return scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=Db.__engine()))
