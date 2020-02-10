@@ -32,12 +32,6 @@ class Controller:
             else:
                 self.sessao.cookies.set("JSESSIONID", self.cookie)
 
-    def normalizacao(self, texto):
-        return unicodedata.normalize('NFKD', texto) \
-            .encode('ASCII', 'ignore').decode('ASCII') \
-            .replace('  ', '').replace('\n', '') \
-            .replace('\r', '')
-
     def auth_token(self):
         if not request.headers['X-Token']:
             return False
@@ -52,6 +46,13 @@ class Controller:
             return False
         else:
             return True
+
+    @staticmethod
+    def normalizacao(text):
+        return unicodedata.normalize('NFKD', text) \
+            .encode('ASCII', 'ignore').decode('ASCII') \
+            .replace('  ', '').replace('\n', '') \
+            .replace('\r', '')
 
     @staticmethod
     def error(code, message):
