@@ -27,6 +27,11 @@ class Controller:
         if validate_token:
             self.__validate_client()
 
+    def _create_token(self, data):
+        enc_jwt = jwt.JWT(header={"alg": "HS256"}, claims=data)
+        enc_jwt.make_signed_token(self.__key)
+        return enc_jwt.serialize()
+
     def _get_token_data(self):
         key = jwk.JWK(**json_decode(self.__key))
         dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
