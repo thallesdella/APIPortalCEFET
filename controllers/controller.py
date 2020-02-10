@@ -1,8 +1,8 @@
 from flask import Blueprint, make_response, jsonify, request, abort
 from jwcrypto import jwt, jwk
 from requests import Session
+from json import loads as json_decode
 import unicodedata
-import json
 
 
 class Controller:
@@ -28,7 +28,7 @@ class Controller:
             self.__validate_client()
 
     def _get_token_data(self):
-        key = jwk.JWK(**json.loads(self.__key))
+        key = jwk.JWK(**json_decode(self.__key))
         dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
         return dec_jwt.claim
 
@@ -46,7 +46,7 @@ class Controller:
         return
 
     def __validate_token(self):
-        key = jwk.JWK(**json.loads(self.__key))
+        key = jwk.JWK(**json_decode(self.__key))
         dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
         return dec_jwt.token.is_valid
 
