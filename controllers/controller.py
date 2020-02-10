@@ -1,6 +1,8 @@
 from flask import Blueprint, make_response, jsonify, request, abort
+from jwcrypto import jwt, jwk
 from requests import Session
 import unicodedata
+import json
 
 
 class Controller:
@@ -18,26 +20,22 @@ class Controller:
 
     blueprint = None
 
-    cookie = None
-
-    matricula = None
-
     def __init__(self, name, import_name, validate_token=True):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
+        self.__token = request.headers['X-Token']
 
         if validate_token:
             if not self.auth_token():
                 self.error(403, 'Não Autorizado')
             else:
-                self.sessao.cookies.set("JSESSIONID", self.cookie)
+                self.sessao.cookies.set("JSESSIONID", self.__token)
 
     def auth_token(self):
         if not request.headers['X-Token']:
             return False
 
-        self.cookie = request.headers['X-Token']
-        self.sessao.cookies.set("JSESSIONID", self.cookie)
+        self.sessao.cookies.set("JSESSIONID", self.__token)
         self.sessao.headers.update({'referer': self.URLS['matricula']})
 
         acesso = self.sessao.get(self.URLS['index_action'], allow_redirects=False)
@@ -46,6 +44,12 @@ class Controller:
             return False
         else:
             return True
+
+    def __validate_token(self):
+
+        key = jwk.JWK(**json.loads(self.__key))
+        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
+        return dec_jwt.token.is_valid
 
     @staticmethod
     def normalizacao(text):
