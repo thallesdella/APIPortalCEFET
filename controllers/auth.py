@@ -22,4 +22,9 @@ class Auth(Controller):
         if Cookie == '':
             self.error(403, 'Não Autorizado')
 
-        return self.success_response(200, {"matricula": Matricula, "cookie": Cookie['JSESSIONID']})
+        return self.success_response(200, self._create_token(
+            {
+                "cookie": Cookie['JSESSIONID'],
+                "matricula": Matricula
+            }
+        ))
