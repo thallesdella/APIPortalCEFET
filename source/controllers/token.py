@@ -1,4 +1,4 @@
-from app.controllers.controller import Controller
+from source.controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 
 

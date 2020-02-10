@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from app.core.db import Db
+from source.core.db import Db
 
 
 class Jwk(Db.base()):

@@ -1,14 +1,14 @@
 from flask import Flask, json
 from werkzeug.exceptions import HTTPException
 
-from app.configs.development_config import DevelopmentConfig as Configs  # para prod, ative aqui!
+from source.configs.development_config import DevelopmentConfig as Configs  # para prod, ative aqui!
 
-from app.core.db import Db
+from source.core.db import Db
 
-from app.controllers.token import Token
-from app.controllers.profile import Profile
-from app.controllers.report import Report
-from app.controllers.schedule import Schedule
+from source.controllers.token import Token
+from source.controllers.profile import Profile
+from source.controllers.report import Report
+from source.controllers.schedule import Schedule
 
 import os
 
