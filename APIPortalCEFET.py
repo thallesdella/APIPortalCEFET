@@ -3,6 +3,8 @@ from werkzeug.exceptions import HTTPException
 
 from app.configs.development_config import DevelopmentConfig as Configs  # para prod, ative aqui!
 
+from app.core.db import Db
+
 from app.controllers.token import Token
 from app.controllers.profile import Profile
 from app.controllers.report import Report
@@ -13,6 +15,7 @@ import os
 app = Flask(__name__)
 
 app.config.from_object(Configs)
+app.teardown_appcontext(Db.close_db)
 
 Token.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Token.get_token)
 app.register_blueprint(Token.blueprint, url_prefix='/token')
@@ -28,7 +31,6 @@ app.register_blueprint(Report.blueprint, url_prefix='/relatorios')
 
 Schedule.blueprint.add_url_rule('', 'schedule.time', Schedule.horarios)
 app.register_blueprint(Schedule.blueprint, url_prefix='/horarios')
-
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
