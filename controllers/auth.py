@@ -7,7 +7,7 @@ class Auth(Controller):
     def __init__(self):
         Controller.__init__(self, 'auth', __name__, False)
 
-    def autenticacao(self, user, passwd):
+    def get_token(self, user, passwd):
         self.sessao.headers.update({'referer': self.URLS['matricula']})
         self.sessao.get(self.URLS['aluno_login_action_error'])
 
