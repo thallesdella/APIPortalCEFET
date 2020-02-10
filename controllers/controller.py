@@ -23,33 +23,41 @@ class Controller:
     def __init__(self, name, import_name, validate_token=True):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
-        self.__token = request.headers['X-Token']
 
         if validate_token:
-            if not self.auth_token():
-                self.error(403, 'Não Autorizado')
-            else:
-                self.sessao.cookies.set("JSESSIONID", self.__token)
+            self.__validate_client()
 
-    def auth_token(self):
-        if not request.headers['X-Token']:
-            return False
+    def _get_token_data(self):
+        key = jwk.JWK(**json.loads(self.__key))
+        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
+        return dec_jwt.claim
 
-        self.sessao.cookies.set("JSESSIONID", self.__token)
+    def __validate_client(self):
+        if (not request.headers['X-Token']) or (not self.__validate_token()):
+            self.error(400, 'Insira um token valido')
+
+        self.__token = request.headers['X-Token']
+
+        token_data = self._get_token_data()
+        self.sessao.cookies.set("JSESSIONID", token_data['cookie'])
+
+        if not self.__auth_client():
+            self.error(403, 'Não Autorizado')
+        return
+
+    def __validate_token(self):
+        key = jwk.JWK(**json.loads(self.__key))
+        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
+        return dec_jwt.token.is_valid
+
+    def __auth_client(self):
         self.sessao.headers.update({'referer': self.URLS['matricula']})
 
         acesso = self.sessao.get(self.URLS['index_action'], allow_redirects=False)
-
         if acesso.status_code == 302:
             return False
         else:
             return True
-
-    def __validate_token(self):
-
-        key = jwk.JWK(**json.loads(self.__key))
-        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
-        return dec_jwt.token.is_valid
 
     @staticmethod
     def normalizacao(text):
