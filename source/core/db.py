@@ -13,6 +13,10 @@ class Db:
 
     @staticmethod
     def create_db():
+        # import models to make sure they are available
+        # when creating the db
+        import source.models.jwk
+
         Db.base().metadata.create_all(bind=Db.__engine())
 
     @staticmethod
