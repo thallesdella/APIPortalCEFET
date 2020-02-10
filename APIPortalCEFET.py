@@ -10,8 +10,8 @@ import os
 
 app = Flask(__name__)
 
-Auth.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Auth.autenticacao, methods=['POST'])
-app.register_blueprint(Auth.blueprint, url_prefix='/autenticacao')
+Auth.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Auth.get_token)
+app.register_blueprint(Auth.blueprint, url_prefix='/token')
 
 Profile.blueprint.add_url_rule('', 'user.user', Profile.perfilDados)
 Profile.blueprint.add_url_rule('/geral', 'user.geral', Profile.perfilDadosGerais)
