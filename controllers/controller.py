@@ -27,7 +27,7 @@ class Controller:
         self.sessao = Session()
 
         if validate_token:
-            if not self.Autenticado():
+            if not self.auth_token():
                 self.error(403, 'Não Autorizado')
             else:
                 self.sessao.cookies.set("JSESSIONID", self.cookie)
@@ -38,7 +38,7 @@ class Controller:
             .replace('  ', '').replace('\n', '') \
             .replace('\r', '')
 
-    def Autenticado(self):
+    def auth_token(self):
         if not request.headers['X-Token']:
             return False
 
