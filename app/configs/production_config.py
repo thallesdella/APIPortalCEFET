@@ -2,4 +2,4 @@ from app.configs.config import Config
 
 
 class ProductionConfig(Config):
-    pass
+    SERVER_IP = '0.0.0.0'
