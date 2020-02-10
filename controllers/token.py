@@ -2,7 +2,7 @@ from controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 
 
-class Auth(Controller):
+class Token(Controller):
 
     def __init__(self):
         Controller.__init__(self, 'auth', __name__, False)

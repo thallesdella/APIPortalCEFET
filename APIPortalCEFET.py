@@ -1,7 +1,7 @@
 from flask import Flask, json
 from werkzeug.exceptions import HTTPException
 
-from controllers.auth import Auth
+from controllers.token import Token
 from controllers.profile import Profile
 from controllers.report import Report
 from controllers.schedule import Schedule
@@ -10,8 +10,8 @@ import os
 
 app = Flask(__name__)
 
-Auth.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Auth.get_token)
-app.register_blueprint(Auth.blueprint, url_prefix='/token')
+Token.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Token.get_token)
+app.register_blueprint(Token.blueprint, url_prefix='/token')
 
 Profile.blueprint.add_url_rule('', 'user.user', Profile.perfilDados)
 Profile.blueprint.add_url_rule('/geral', 'user.geral', Profile.perfilDadosGerais)
