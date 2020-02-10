@@ -1,10 +1,10 @@
 from flask import Flask, json
 from werkzeug.exceptions import HTTPException
 
-from controllers.token import Token
-from controllers.profile import Profile
-from controllers.report import Report
-from controllers.schedule import Schedule
+from app.controllers.token import Token
+from app.controllers.profile import Profile
+from app.controllers.report import Report
+from app.controllers.schedule import Schedule
 
 import os
 

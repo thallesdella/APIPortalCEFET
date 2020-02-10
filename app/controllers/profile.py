@@ -1,5 +1,5 @@
 from flask import send_file
-from controllers.controller import Controller
+from app.controllers.controller import Controller
 from bs4 import BeautifulSoup as bs
 import io
 import re
