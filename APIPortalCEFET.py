@@ -1,6 +1,8 @@
 from flask import Flask, json
 from werkzeug.exceptions import HTTPException
 
+from app.configs.development_config import DevelopmentConfig as Configs  # para prod, ative aqui!
+
 from app.controllers.token import Token
 from app.controllers.profile import Profile
 from app.controllers.report import Report
@@ -9,6 +11,8 @@ from app.controllers.schedule import Schedule
 import os
 
 app = Flask(__name__)
+
+app.config.from_object(Configs)
 
 Token.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', Token.get_token)
 app.register_blueprint(Token.blueprint, url_prefix='/token')
@@ -38,6 +42,5 @@ def handle_exception(e):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)  # para prod, ative aqui!
-    # app.run(debug=True, host='127.0.0.1', port=port)  # para dev, ative aqui!
+    port = int(os.environ.get('PORT', app.config['SERVER_PORT']))
+    app.run(debug=app.config['DEBUG'], host=app.config['SERVER_IP'], port=port)
