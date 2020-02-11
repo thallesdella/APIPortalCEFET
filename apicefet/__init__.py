@@ -1,15 +1,10 @@
-from flask import Flask, json
+from flask import Flask
 from werkzeug.exceptions import HTTPException
 
 from apicefet.core.db import Db
 
-from apicefet.controllers.token.routes import token
-from apicefet.controllers.profile.routes import profile
-from apicefet.controllers.reports.routes import report
-from apicefet.controllers.schedule.routes import schedule
 
-
-def create_app(env):
+def create_app(env='develop'):
     app = Flask(__name__)
 
     if env == 'production':
@@ -19,19 +14,18 @@ def create_app(env):
 
     app.config.from_object(Config)
 
-    app.register_blueprint(token.blueprint, url_prefix='/token')
-    app.register_blueprint(profile.blueprint, url_prefix='/perfil')
-    app.register_blueprint(report.blueprint, url_prefix='/relatorios')
-    app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
+    with app.app_context():
+        from apicefet.controllers.token.routes import token
+        from apicefet.controllers.profile.routes import profile
+        from apicefet.controllers.reports.routes import report
+        from apicefet.controllers.schedule.routes import schedule
+        from apicefet.controllers.errors import handle_http_exception
 
-    @app.errorhandler(HTTPException)
-    def handle_exception(e):
-        response = e.get_response()
-        response.data = json.dumps({
-            "code": e.code,
-            "error": e.description,
-        })
-        response.content_type = "application/json"
-        return response
+        app.register_blueprint(token.blueprint, url_prefix='/token')
+        app.register_blueprint(profile.blueprint, url_prefix='/perfil')
+        app.register_blueprint(report.blueprint, url_prefix='/relatorios')
+        app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
+
+        app.register_error_handler(HTTPException, handle_http_exception)
 
     return app
