@@ -7,3 +7,7 @@ class Jwk(Db.base()):
     id = Column(Integer, primary_key=True)
     key = Column(String(100), unique=True)
     type = Column(String(10))
+
+    def __init__(self, key, type):
+        self.key = key
+        self.type = type
