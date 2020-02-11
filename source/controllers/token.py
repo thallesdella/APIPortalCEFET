@@ -22,9 +22,5 @@ class Token(Controller):
         if Cookie == '':
             self.error(403, 'Não Autorizado')
 
-        return self.success_response(200, self._create_token(
-            {
-                "cookie": Cookie['JSESSIONID'],
-                "matricula": Matricula
-            }
-        ))
+        token = self._jwt.create_token({"cookie": Cookie['JSESSIONID'], "matricula": Matricula})
+        return self.success_response(200, {"token": token})
