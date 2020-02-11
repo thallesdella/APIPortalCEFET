@@ -1,7 +1,9 @@
 from configs.config import Config
+from os import environ
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    SERVER_IP = environ.get('SERVER_IP_DEV')
+    SERVER_PORT = environ.get('SERVER_PORT')
 
-    DATABASE_URI = '/path/to/database.db'
+    DEBUG = True

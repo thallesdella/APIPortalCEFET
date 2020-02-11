@@ -1,12 +1,9 @@
-class Config(object):
-    SERVER_IP = '127.0.0.1'
-    SERVER_PORT = 5000
+from os import environ
 
+
+class Config:
     DEBUG = False
     TESTING = False
 
-    DB_SERVER = '127.0.0.1'
-
-    @property
-    def DATABASE_URI(self):
-        return 'mysql://user@{}/api'.format(self.DB_SERVER)
+    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_TRACK_MODIFICATIONS = environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
