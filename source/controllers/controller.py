@@ -1,7 +1,6 @@
 from flask import Blueprint, make_response, jsonify, request, abort
-from jwcrypto import jwt, jwk
+from source.core.jwt import Jwt
 from requests import Session
-from json import loads as json_decode
 import unicodedata
 
 
@@ -18,42 +17,37 @@ class Controller:
         'security_check': 'https://alunos.cefet-rj.br/aluno/j_security_check'
     }
 
-    blueprint = None
-
     def __init__(self, name, import_name, validate_token=True):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
+        self.__token = None
+        self._jwt = Jwt()
 
         if validate_token:
             self.__validate_client()
 
-    def _create_token(self, data):
-        enc_jwt = jwt.JWT(header={"alg": "HS256"}, claims=data)
-        enc_jwt.make_signed_token(self.__key)
-        return enc_jwt.serialize()
+    @property
+    def token(self):
+        return self.__token
 
-    def _get_token_data(self):
-        key = jwk.JWK(**json_decode(self.__key))
-        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
-        return dec_jwt.claim
+    @token.setter
+    def token(self, token):
+        self.__token = token
+        self._jwt._token = token
+        return
 
     def __validate_client(self):
-        if (not request.headers['X-Token']) or (not self.__validate_token()):
+        if (not request.headers['X-Token']) or (not self._jwt.validate_token()):
             self.error(400, 'Insira um token valido')
 
-        self.__token = request.headers['X-Token']
+        self.token = request.headers['X-Token']
 
-        token_data = self._get_token_data()
+        token_data = self._jwt.get_token_data()
         self.sessao.cookies.set("JSESSIONID", token_data['cookie'])
 
         if not self.__auth_client():
             self.error(403, 'Não Autorizado')
         return
-
-    def __validate_token(self):
-        key = jwk.JWK(**json_decode(self.__key))
-        dec_jwt = jwt.JWT().deserialize(jwt=self.__token, key=key)
-        return dec_jwt.token.is_valid
 
     def __auth_client(self):
         self.sessao.headers.update({'referer': self.URLS['matricula']})
@@ -74,6 +68,7 @@ class Controller:
     @staticmethod
     def error(code, message):
         abort(code, description=message)
+        return
 
     @staticmethod
     def success_response(code, data):
