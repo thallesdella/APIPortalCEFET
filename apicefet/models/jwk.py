@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from source.core.db import Db
+from apicefet.core.db import Db
 
 
 class Jwk(Db.base()):

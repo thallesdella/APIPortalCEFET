@@ -1,4 +1,4 @@
-from source.configs.config import Config
+from configs.config import Config
 
 
 class ProductionConfig(Config):

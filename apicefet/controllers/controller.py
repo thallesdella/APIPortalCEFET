@@ -1,5 +1,5 @@
 from flask import Blueprint, make_response, jsonify, request, abort
-from source.core.jwt import Jwt
+from apicefet.core.jwt import Jwt
 from requests import Session
 import unicodedata
 

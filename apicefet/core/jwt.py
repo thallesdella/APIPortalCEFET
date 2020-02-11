@@ -1,4 +1,4 @@
-from source.models.jwk import Jwk as JwkModel
+from apicefet.models.jwk import Jwk as JwkModel
 from json import dumps as json_encode
 from json import loads as json_decode
 from jwcrypto import jwt, jwk
