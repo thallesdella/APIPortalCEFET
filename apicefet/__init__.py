@@ -3,10 +3,10 @@ from werkzeug.exceptions import HTTPException
 
 from apicefet.core.db import Db
 
-from apicefet.controllers.token.token import Token
-from apicefet.controllers.profile.profile import Profile
-from apicefet.controllers.reports.report import Report
-from apicefet.controllers.schedule.schedule import Schedule
+from apicefet.controllers.token.routes import token
+from apicefet.controllers.profile.routes import profile
+from apicefet.controllers.reports.routes import report
+from apicefet.controllers.schedule.routes import schedule
 
 
 def create_app(env):
