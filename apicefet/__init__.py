@@ -1,7 +1,8 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
 
-from apicefet.core.db import Db
+db = SQLAlchemy()
 
 
 def create_app(env='develop'):
@@ -11,8 +12,9 @@ def create_app(env='develop'):
         from configs.production_config import ProductionConfig as Config
     else:
         from configs.development_config import DevelopmentConfig as Config
-
     app.config.from_object(Config)
+
+    db.init_app(app)
 
     with app.app_context():
         from apicefet.controllers.token.routes import token
