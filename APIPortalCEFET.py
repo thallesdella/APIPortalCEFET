@@ -17,26 +17,27 @@ app = Flask(__name__)
 app.config.from_object(Configs)
 app.teardown_appcontext(Db.close_db)
 
-token = Token
+token = Token()
 token.blueprint.add_url_rule('/<string:user>/<string:passwd>', 'auth.user', token.get_token)
 
 app.register_blueprint(token.blueprint, url_prefix='/token')
 
-profile = Profile
+profile = Profile()
 profile.blueprint.add_url_rule('', 'user.user', profile.perfilDados)
 profile.blueprint.add_url_rule('/geral', 'user.geral', profile.perfilDadosGerais)
 profile.blueprint.add_url_rule('/foto', 'user.photo', profile.perfilFoto)
 
 app.register_blueprint(profile.blueprint, url_prefix='/perfil')
 
-report = Report
+report = Report()
 report.blueprint.add_url_rule('', 'report.list', report.lista_relatorios)
 report.blueprint.add_url_rule('/<path:url>', 'report.generate', report.geraRelatorio)
 
 app.register_blueprint(report.blueprint, url_prefix='/relatorios')
 
-Schedule.blueprint.add_url_rule('', 'schedule.time', Schedule.horarios)
-app.register_blueprint(Schedule.blueprint, url_prefix='/horarios')
+schedule = Schedule()
+schedule.blueprint.add_url_rule('', 'schedule.time', schedule.horarios)
+app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
 
 
 @app.errorhandler(HTTPException)
