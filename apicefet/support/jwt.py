@@ -1,4 +1,4 @@
-from apicefet.models.jwk import Jwk as JwkModel
+from apicefet.models.jwk import db, Jwk as JwkModel
 from json import dumps as json_encode
 from json import loads as json_decode
 from jwcrypto import jwt, jwk
@@ -33,8 +33,8 @@ class Jwt:
         self.__key = json_decode(jwk_key.export())
 
         jwk_model = JwkModel(self.__key['k'], self.__key['kty'])
-        jwk_model.add()
-        jwk_model.commit()
+        db.session.add(jwk_model)
+        db.session.commit()
         return
 
     def __get_key(self):
