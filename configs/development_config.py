@@ -4,6 +4,7 @@ from os import environ
 
 class DevelopmentConfig(Config):
     SERVER_IP = environ.get('SERVER_IP_DEV')
-    SERVER_PORT = environ.get('SERVER_PORT')
+    SERVER_NAME = 'localhost'
 
-    DEBUG = True
+    FLASK_ENV = 'development'
+    TESTING = True
