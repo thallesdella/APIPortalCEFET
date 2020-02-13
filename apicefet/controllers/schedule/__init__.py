@@ -1,4 +1,4 @@
-from apicefet.controllers.controller import Controller
+from apicefet.controllers import Controller
 
 
 class Schedule(Controller):
