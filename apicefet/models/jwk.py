@@ -1,13 +1,11 @@
-from sqlalchemy import Column, Integer, String
 from apicefet import db
 
 
 class Jwk(db.Model):
-    _tablename__ = 'jwt_key'
-    id = Column(Integer, primary_key=True)
-    key = Column(String(100), unique=True, nullable=False)
-    type = Column(String(10), nullable=False)
+    db.__tablename__ = 'jwt_secret'
 
-    def __init__(self, key, type):
-        self.key = key
-        self.type = type
+    id = db.Column(db.Integer, primary_key=True)
+    secret = db.Column(db.String(255), unique=True, nullable=False)
+
+    def __init__(self, secret):
+        self.secret = secret
