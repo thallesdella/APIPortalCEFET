@@ -1,8 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
-
-db = SQLAlchemy()
 
 
 def create_app(env='develop'):
@@ -14,8 +11,6 @@ def create_app(env='develop'):
         from configs.development_config import DevelopmentConfig as Config
 
     app.config.from_object(Config)
-
-    db.init_app(app)
 
     with app.app_context():
         from apicefet.controllers.token.routes import token
@@ -30,7 +25,4 @@ def create_app(env='develop'):
         app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
 
         app.register_error_handler(HTTPException, handle_http_exception)
-
-        app.cli.add_command(db.create_all(), 'create-db')
-
     return app
