@@ -1,5 +1,6 @@
 from apicefet.models.jwk import db, Jwk as JwkModel
 from itsdangerous import TimedJSONWebSignatureSerializer
+from apicefet import create_app as app
 from os import urandom
 
 
@@ -11,11 +12,11 @@ class Jwt:
             self.__get_key()
 
     def create_token(self, data):
-        jwt = TimedJSONWebSignatureSerializer(self.__key, expires_in=600)
+        jwt = TimedJSONWebSignatureSerializer(self.__key, expires_in=app().config['TOKEN_EXPIRE'])
         return jwt.dumps(data)
 
     def get_token_data(self, token):
-        jwt = TimedJSONWebSignatureSerializer(self.__key, expires_in=600)
+        jwt = TimedJSONWebSignatureSerializer(self.__key, expires_in=app().config['TOKEN_EXPIRE'])
         return jwt.loads(token)
 
     def __create_key(self):
