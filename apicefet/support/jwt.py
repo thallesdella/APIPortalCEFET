@@ -1,4 +1,4 @@
-from apicefet.models.jwk import db, Jwk as JwkModel
+from apicefet.models.jwk import Jwk as JwkModel
 from itsdangerous import TimedJSONWebSignatureSerializer
 from apicefet import create_app as app
 from os import urandom
@@ -6,7 +6,7 @@ from os import urandom
 
 class Jwt:
     def __init__(self):
-        if not JwkModel.query.count():
+        if not JwkModel().count():
             self.__create_key()
         else:
             self.__get_key()
@@ -21,12 +21,10 @@ class Jwt:
 
     def __create_key(self):
         self.__key = urandom(24).hex()
-
-        jwk_model = JwkModel(self.__key)
-
-        db.session.add(jwk_model)
-        db.session.commit()
+        JwkModel().bootstrap(self.__key)
         return
 
     def __get_key(self):
-        pass
+        table_data = JwkModel().dumps()
+        self.__key = table_data[0]['secret']
+        return
