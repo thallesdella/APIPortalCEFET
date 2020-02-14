@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 class Token(Controller):
 
     def __init__(self):
-        Controller.__init__(self, 'auth', __name__, False)
+        Controller.__init__(self, 'token', __name__, False)
 
     def get_token(self, user, passwd):
         self.sessao.headers.update({'referer': self.URLS['matricula']})
