@@ -20,30 +20,23 @@ class Controller:
     def __init__(self, name, import_name, validate_token=True):
         self.blueprint = Blueprint(name, import_name)
         self.sessao = Session()
-        self.__token = None
+        self.token_data = None
         self._jwt = Jwt()
 
         if validate_token:
             self.__validate_client()
 
-    @property
-    def token(self):
-        return self.__token
-
-    @token.setter
-    def token(self, token):
-        self.__token = token
-        self._jwt._token = token
-        return
-
     def __validate_client(self):
-        if (not request.headers['X-Token']) or (not self._jwt.validate_token()):
+        if not 'X-Token' in request.headers:
+            self.error(400, 'Insira um token')
+        token = request.headers['X-Token']
+
+        try:
+            self.token_data = self._jwt.get_token_data(token)
+        except:
             self.error(400, 'Insira um token valido')
 
-        self.token = request.headers['X-Token']
-
-        token_data = self._jwt.get_token_data()
-        self.sessao.cookies.set("JSESSIONID", token_data['cookie'])
+        self.sessao.cookies.set("JSESSIONID", self.token_data['cookie'])
 
         if not self.__auth_client():
             self.error(403, 'Não Autorizado')
