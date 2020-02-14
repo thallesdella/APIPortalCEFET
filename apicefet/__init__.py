@@ -29,8 +29,8 @@ def create_app(env='develop'):
         app.register_blueprint(report.blueprint, url_prefix='/relatorios')
         app.register_blueprint(schedule.blueprint, url_prefix='/horarios')
 
-        db.create_all()
-
         app.register_error_handler(HTTPException, handle_http_exception)
+
+        app.cli.add_command(db.create_all(), 'create-db')
 
     return app
