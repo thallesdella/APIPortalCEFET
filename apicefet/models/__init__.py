@@ -20,7 +20,7 @@ class Model:
         return []
 
     def loads(self, data):
-        if not data['id']:
+        if not 'id' in data:
             return self.__add_data(data)
         return self.__update_data(data)
 
